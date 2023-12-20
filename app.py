@@ -1,5 +1,6 @@
 from tornado import websocket, web, ioloop
 import json
+import os
 
 cl = []
 
@@ -35,13 +36,18 @@ class ApiHandler(web.RequestHandler):
     def post(self):
         pass
 
+settings = dict(
+    static_path=os.path.join(os.path.dirname(__file__), "static")
+)
+
 app = web.Application([
     (r'/', IndexHandler),
     (r'/ws', SocketHandler),
     (r'/api', ApiHandler),
     (r'/(favicon.ico)', web.StaticFileHandler, {'path': '../'}),
-    (r'/(rest_api_example.png)', web.StaticFileHandler, {'path': './'}),
-])
+    (r'/(rest_api_example.png)', web.StaticFileHandler, {'path': './'})],
+    **settings
+    )
 
 if __name__ == '__main__':
     app.listen(8888)
